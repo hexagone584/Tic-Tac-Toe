@@ -7,7 +7,7 @@ A simple tic tac toe game that you can run in the terminal. Supports playing aga
 I want to see how AI works underneath the hood, so I want to simulate a little algorithm that uses positive reinforcement. 
 
 ## How It Works
-![System diagram](Screenshot 2026-10-31 152349.png)
+![System diagram](Screenshot%202026-10-31%20152349.png)
 
 ## Tech Stack
 
