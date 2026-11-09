@@ -38,13 +38,31 @@ while [ "$turns" -lt 9 ]; do
 			fi
 		done
 	elif [[ "$location" == [1-9] ]]; then
-		placementSuccess=$(java placement.java "$location" "$player")
+		placementSuccess=$(java Placement.java "$location" "$player")
 		if [[ $placementSuccess != "Success" ]]; then
 			echo "Invalid Placement!"
 			continue
 		fi
+		
+		winVerification=$(java WinVerify.java)
 
-		if [[ $player == "X" ]]; then
+		case "$winVerification" in
+			"X")
+				echo "X Wins!"
+				break;;
+			"O")
+				echo "O Wins!"
+				break;;
+			"T")
+				echo "Tie!"
+				break;;
+			"N");;
+			"L")
+				echo "dear god what have you done"
+				break;;
+		esac
+			
+		if [[ "$player" == "X" ]]; then
 			player="O"
 		else
 			player="X"
