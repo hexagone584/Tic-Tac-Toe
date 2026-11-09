@@ -15,13 +15,12 @@ I want to see how AI works underneath the hood, so I want to simulate a little a
 - **Libraries/Commands:** piping, echo, cat, arrayList, BufferedReader, FileReader, Random
 
 ## Setup
-
-Step-by-step: how does someone who just cloned your repo get it
-running?
+Requires Java 11+
 
 ```bash
 git clone https://github.com/hexagone584/Tic-Tac-Toe
 cd Tic-Tac-Toe
+./start.sh
 ```
 
 ## Usage
