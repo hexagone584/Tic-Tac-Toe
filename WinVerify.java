@@ -9,6 +9,54 @@ import java.io.IOException;
 // L = Something's wrong and I have severely messed up
 
 class WinVerify {
+    //same thing as main, however it's for menace
+    public static String check(String board) {
+        String winner = "";
+        String[] splitBoard = board.split(" ");
+
+        //Row
+        for (int i = 0; i < splitBoard.length; i += 3) {
+            if (splitBoard[i].equals(splitBoard[i+1]) && splitBoard[i+1].equals(splitBoard[i+2])) {
+                if (splitBoard[i].equals("-")) {
+                    continue;
+                }
+                winner = splitBoard[i];
+                return winner;
+            }
+        }
+
+        //Column
+        for (int i = 0; i < 3; i++) {
+            if (splitBoard[i].equals(splitBoard[i+3]) && splitBoard[i+3].equals(splitBoard[i+6])) {
+                if (splitBoard[i].equals("-")) {
+                    continue;
+                }
+                winner = splitBoard[i];
+                return winner;
+            }
+        }
+
+        //diagonals
+        if (!splitBoard[0].equals("-") && splitBoard[0].equals(splitBoard[4]) && splitBoard[4].equals(splitBoard[8])) {
+            winner = splitBoard[0];
+            return winner;
+        }
+        if (!splitBoard[2].equals("-") && splitBoard[2].equals(splitBoard[4]) && splitBoard[4].equals(splitBoard[6])) {
+            winner = splitBoard[2];
+            return winner;
+        }
+
+        //tie or undecided?
+        for (int i = 0; i < splitBoard.length; i++) {
+            if (splitBoard[i].equals("-")) {
+                winner = "N";
+                return winner;
+            }
+        }
+        winner = "T";
+        return winner;
+    }
+
     public static void main(String[] args) {
         String winner = "";
         String[] board = new String[9];

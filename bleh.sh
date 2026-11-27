@@ -1,0 +1,1 @@
+java MENACE.java "$(cat board.txt)" "play"

@@ -15,7 +15,7 @@ I want to see how AI works underneath the hood, so I want to simulate a little a
 - **Libraries/Commands:** piping, echo, cat, arrayList, BufferedReader, FileReader, Random
 
 ## Setup
-Requires Java 11+
+Requires Java 14+
 
 ```bash
 git clone https://github.com/hexagone584/Tic-Tac-Toe
@@ -32,9 +32,9 @@ Run the bash script
 
 ## Roadmap
 
-- [ ] Build tic-tac-toe in bash
-- [ ] pipe board into java to check for wins
-- [ ] make bot w/ reinforcement learning
+- [X] Build tic-tac-toe in bash
+- [X] pipe board into java to check for wins
+- [X] make bot w/ reinforcement learning
 - [ ] collect data for the bot
 
 ## Author
