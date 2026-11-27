@@ -1,5 +1,16 @@
 #!/bin/bash
 wantsToQuit=0
+#Should be folder specific
+MenaceTable=$(find . -name "MenaceTable.csv")
+#should be in HelperClasses
+MENACE=$(find .. -name "MENACE.java")
+WinVerify=$(find .. -name "WinVerify.java")
+Placement=$(find .. -name "Placement.java")
+PositionStorage=$(find .. -name "PositionStorage.csv")
+ActualBoard=$(find .. -name "board.txt")
+# bleh=$(java "$MENACE" "$(cat $ActualBoard)" "start")
+# echo $bleh
+# exit 0
 #main logic
 while [[ "$wantsToQuit" -eq 0 ]]; do
 	# initialization
@@ -14,14 +25,13 @@ while [[ "$wantsToQuit" -eq 0 ]]; do
 	winVerification="N"
 
 	# restarts the board
-	echo "board" > board.txt
-	for i in {1..9}
-	do
-		if !(( "$i" % 3 )); then
-			echo "-" >> board.txt
+    echo "board" > "$ActualBoard"
+	for i in {1..9}; do
+		if (( "$i" % 3 == 0 )); then
+			printf -- "-\n" >> "$ActualBoard"
 		else
-			echo -n "-" >> board.txt
-			echo -n " " >> board.txt
+			printf -- "-" >> "$ActualBoard"
+			printf -- " " >> "$ActualBoard"
 		fi
 	done
 
@@ -29,16 +39,16 @@ while [[ "$wantsToQuit" -eq 0 ]]; do
 		#menace will play first
 		if [[ "$player" == "X" ]]; then
 			if [[ "$turns" -eq 0 ]]; then
-				menacePlacement=$(java MENACE.java "$(cat board.txt)" "start")
+				menacePlacement=$(java "$MENACE" "$(cat $ActualBoard)" "start" "$PositionStorage" "$MenaceTable")
 			else
-				menacePlacement=$(java MENACE.java "$(cat board.txt)" "play")
+				menacePlacement=$(java "$MENACE" "$(cat $ActualBoard)" "play" "$PositionStorage" "$MenaceTable")
 			fi
 			
-			menacePlacementStatus=$(java Placement.java "$menacePlacement" "$player")
+			menacePlacementStatus=$(java "$Placement" "$menacePlacement" "$player" "$ActualBoard")
 			player="O"
 		else
 			echo "pick a location (or enter 0 for help)"
-			cat board.txt
+			cat $ActualBoard
 			read location
 
 			if [ "$location" = 0 ]; then
@@ -55,7 +65,7 @@ while [[ "$wantsToQuit" -eq 0 ]]; do
 				fi
 			done
 			elif [[ "$location" == [1-9] ]]; then
-				placementSuccess=$(java Placement.java "$location" "$player")
+				placementSuccess=$(java "$Placement" "$location" "$player" "$ActualBoard")
 				if [[ $placementSuccess != "Success" ]]; then
 					echo "Invalid Placement!"
 					continue
@@ -66,23 +76,23 @@ while [[ "$wantsToQuit" -eq 0 ]]; do
 			fi
 		fi
 
-		winVerification=$(java WinVerify.java)
+		winVerification=$(java "$WinVerify" "$ActualBoard")
 
 		case "$winVerification" in
 			"X")
-				cat board.txt
+				cat "$ActualBoard"
 				echo "X Wins!"
-				menacePlacement=$(java MENACE.java "$(cat board.txt)" "learn")
+				menacePlacement=$(java "$MENACE" "$(cat "$ActualBoard")" "learn" "$PositionStorage" "$MenaceTable")
 				break;;
 			"O")
-				cat board.txt
+				cat "$ActualBoard"
 				echo "O Wins!"
-				menacePlacement=$(java MENACE.java "$(cat board.txt)" "learn")
+				menacePlacement=$(java "$MENACE" "$(cat "$ActualBoard")" "learn" "$PositionStorage" "$MenaceTable")
 				break;;
 			"T")
-				cat board.txt
+				cat "$ActualBoard"
 				echo "Tie!"
-				menacePlacement=$(java MENACE.java "$(cat board.txt)" "learn")
+				menacePlacement=$(java "$MENACE" "$(cat "$ActualBoard")" "learn" "$PositionStorage" "$MenaceTable")
 				break;;
 			"N");;
 			"L")

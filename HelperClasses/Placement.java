@@ -4,9 +4,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-class placement {
-    //arg[0] location in the tic tac toe board
-    //arg[1] player
+//args[0] - where to place
+//args[1] - who placed it (X or O)
+//args[2] - filepath of the board.txt
+class Placement {
     public static void main(String[] args) {
         //we subtract by 1 to maintain 0 based index consistency
         int location = Integer.parseInt(args[0]) - 1;
@@ -14,7 +15,7 @@ class placement {
         int targetRow = location / 3;
         int targetColumn = location % 3;
         String[] newLines = new String[4];
-        try (BufferedReader br = new BufferedReader(new FileReader("board.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(args[2]))) {
             String line = "";
             while ((line = br.readLine()) != null) {
                 if (line.equals("board")) {
@@ -45,7 +46,7 @@ class placement {
         } catch (Exception i) {
             System.out.println("uhoh");
         }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("board.txt"))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(args[2]))) {
             for (String newLine : newLines) {
                 bw.write(newLine);
                 bw.newLine();

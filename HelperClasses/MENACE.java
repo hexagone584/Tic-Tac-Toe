@@ -55,7 +55,7 @@ public class MENACE {
     }
 
     //will return Line
-    public static String findBoard(ArrayList<String> csv, String currentBoard) {
+    public static String findBoard(ArrayList<String> csv, String currentBoard, String fileName) {
         //attempts to find the board
         //boardLine will be the entire line
         String boardLine = null;
@@ -87,7 +87,7 @@ public class MENACE {
 
 
         if (boardLine == null) { //board not found, insert into the csv
-            try (PrintWriter out = new PrintWriter(new FileWriter("BoardPositions.csv", true))) {
+            try (PrintWriter out = new PrintWriter(new FileWriter(fileName, true))) {
                 out.println();
                 out.print(count);
                 out.print(",");
@@ -114,7 +114,7 @@ public class MENACE {
             return boardLine;
         }
 
-        return findBoard(getBoards("BoardPositions.csv"),currentBoard);
+        return findBoard(getBoards(fileName),currentBoard, fileName);
     }
 
     //plays the game
@@ -123,7 +123,12 @@ public class MENACE {
         //makes menace build (menace plays first)
         //args[0] is the board given
         //args[1] is the mode menace should be running on
+        //args[2] is the filepath for MenaceTable.csv
+        //args[3] is the filepath for PositionStorage.csv
         String currentBoard = args[0];  //board.txt is different than "- - - - - - - - -" needed
+        String PositionStorage = args[2];
+        String MenaceTable = args[3];
+        
         String[] splitCurrentBoard = currentBoard.replace("board\n", "").split("\\s+"); // replace to get rid of 'board'
         currentBoard = String.join(" ", splitCurrentBoard);
 
@@ -146,7 +151,7 @@ public class MENACE {
                 }
 
                 ArrayList<String> boardMoves = new ArrayList<>();
-                try (BufferedReader br = new BufferedReader(new FileReader("board_position_storage.csv"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader(PositionStorage))) {
                     String line = "";
                     while ((line = br.readLine()) != null) {
                         boardMoves.add(line);
@@ -155,7 +160,7 @@ public class MENACE {
                 }
 
                 ArrayList<String> csvFile = new ArrayList<>();
-                try (BufferedReader br = new BufferedReader(new FileReader("BoardPositions.csv"))) {
+                try (BufferedReader br = new BufferedReader(new FileReader(MenaceTable))) {
                     String line = "";
                     while ((line = br.readLine()) != null) {
                         if (line.split(",")[0].equals("board_number")) {
@@ -196,7 +201,7 @@ public class MENACE {
                 }
                 
                 if (!csvFile.isEmpty()) {
-                    try (PrintWriter out = new PrintWriter(new FileWriter("BoardPositions.csv", false))) {
+                    try (PrintWriter out = new PrintWriter(new FileWriter(MenaceTable, false))) {
                         for (int i = 0; i < csvFile.size(); i++) {
                             if (i != csvFile.size() - 1) {
                                 out.println(csvFile.get(i));
@@ -214,18 +219,18 @@ public class MENACE {
                 
                 break;
             }
-            //restarts the board_position_storage.csv
+            //restarts the PositionStorage.csv
             case "start": { //intentionally fall through
-                try (PrintWriter out = new PrintWriter(new FileWriter("board_position_storage.csv", false))) {
+                try (PrintWriter out = new PrintWriter(new FileWriter(PositionStorage, false))) {
                     out.print("");
                 } catch (Exception e) {
                     e.getMessage();
                 }
             }
             default: {
-                ArrayList<String> csv = getBoards("BoardPositions.csv");
+                ArrayList<String> csv = getBoards(MenaceTable);
 
-                String[] boardLine = findBoard(csv, currentBoard).split(",");
+                String[] boardLine = findBoard(csv, currentBoard, MenaceTable).split(",");
 
                 int beads = 0;
                 for (int i = 10; i < 19; i++) {
@@ -243,7 +248,7 @@ public class MENACE {
                 }
 
                 //we need to store which bead was placed
-                try (PrintWriter out = new PrintWriter(new FileWriter("board_position_storage.csv", true))) {
+                try (PrintWriter out = new PrintWriter(new FileWriter(PositionStorage, true))) {
                     out.print(currentBoard);
                     out.print(",");
                     out.println(chosen);

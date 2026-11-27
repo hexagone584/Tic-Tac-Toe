@@ -56,12 +56,12 @@ class WinVerify {
         winner = "T";
         return winner;
     }
-
+    //args[0] is the file path
     public static void main(String[] args) {
         String winner = "";
         String[] board = new String[9];
         int count = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader("board.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
             String line = "";
             while ((line = br.readLine()) != null) {
                 if (line.equals("board")) {
