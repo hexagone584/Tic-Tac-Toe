@@ -17,17 +17,25 @@ I want to see how AI works underneath the hood, so I want to simulate a little a
 ## Setup
 Requires Java 14+
 
+run this command to start it up
 ```bash
 git clone https://github.com/hexagone584/Tic-Tac-Toe
 cd Tic-Tac-Toe
-./start.sh
 ```
+you should be in the `Tic-Tac-Toe` directory
 
 ## Usage
-Run the bash script
+Run the bash script. there are three options:
 
+if you want to play against menace, run this:
 ```bash
-./start.sh
+./start.sh main
+```
+
+if you want menace to play against a bot that does random moves or a bot that never loses, run this:
+(replace `AgainstRandom` with `AgainstMiniMax`)
+```bash
+./start.sh AgainstRandom 500
 ```
 
 ## Roadmap

@@ -46,6 +46,7 @@ public class MiniMaxBot {
         // X moves first, so on the bot's (O's) turn X has exactly one more piece.
         if (count(board, 'X') != count(board, 'O') + 1) {
             fail(1, "invalid board for O to move (expected one more X than O).");
+            System.out.println(board);
         }
 
         if (winner(board) != EMPTY || isFull(board)) fail(2, "game is already over.");

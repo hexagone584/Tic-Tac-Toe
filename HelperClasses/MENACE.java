@@ -3,7 +3,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class MENACE {
-    public static boolean boardCheck(String board, String comparison) {
+    //returns the transformation that the 'board' will need to undergo to equate to comparison
+    //useful since we are ignoring transformed duplicates and we need to update beads accordingly
+    public static int[] findTransformation(String board, String comparison) {
         //format should be "1 2 3 4 5 6 7 8 9"
         //we are going to compare all the rotations and reflections
         int[] normal = {0, 1, 2, 3, 4, 5, 6, 7, 8};
@@ -16,27 +18,27 @@ public class MENACE {
         int[] topRighttoBottomLeftMirror = {8, 5, 2, 7, 4, 1, 6, 3, 0};
         int[][] transformations = {normal, rotated90, rotated180, rotated270, mirrorHorizontal, mirrorVertical, topLefttoBottomRightMirror, topRighttoBottomLeftMirror};
 
-        boolean isEqual = false;
+        String[] splitBoard = board.split(" ");
+        String[] splitComparison = comparison.split(" ");
+
         for (int[] transformation : transformations) {
-            String[] transformedBoard = new String[9];
-
-            for (int i = 0; i < 9; i++) {
-                transformedBoard[i] = board.split(" ")[transformation[i]];
-            }
-
+            boolean isEqual = true;
             isEqual = true;
             for (int i = 0; i < 9; i++) {
-                if (!transformedBoard[i].equals(comparison.split(" ")[i])) {
+                if (!splitBoard[transformation[i]].equals(splitComparison[i])) {
                     isEqual = false;
                     break;
                 }
             }
             if (isEqual) {
-                //System.out.println(Arrays.toString(board));
-                break;
+                return transformation;
             }
         }
-        return isEqual;
+        return null;
+    } 
+
+    public static boolean boardCheck(String board, String comparison) {
+        return findTransformation(board, comparison) != null;
     }
 
     public static ArrayList<String> getBoards(String fileName) {
@@ -232,6 +234,23 @@ public class MENACE {
 
                 String[] boardLine = findBoard(csv, currentBoard, MenaceTable).split(",");
 
+                //we're gonna store which position menace plays.
+                //however, the menace table is not stored in a consistent transformation
+
+                //menace selects the optimal play under ITS specific transformation
+                //our code then translates the optimal play position under MENACES transformation
+                // to the ACTUAL board transformation (see println at bottom)
+                String storedBoard = "";
+                for (int i = 1; i < 10; i++) {
+                    storedBoard += boardLine[i];
+                    if (i != 9) {
+                        storedBoard += " ";
+                    }
+                }
+                
+                int[] transformation = findTransformation(currentBoard, storedBoard.toString());
+
+
                 int beads = 0;
                 for (int i = 10; i < 19; i++) {
                     beads += Integer.parseInt(boardLine[i]);
@@ -246,7 +265,7 @@ public class MENACE {
                         break;
                     }
                 }
-
+                                
                 //we need to store which bead was placed
                 try (PrintWriter out = new PrintWriter(new FileWriter(PositionStorage, true))) {
                     out.print(currentBoard);
@@ -271,7 +290,7 @@ public class MENACE {
 
                 }
                 //we need to print out the position where MENACE placed for our start.sh
-                System.out.println(chosen - 9);
+                System.out.println(transformation[chosen - 10] + 1);
             }
         }
     }

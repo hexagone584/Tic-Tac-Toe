@@ -5,13 +5,12 @@
 ActualBoard=$(find ../HelperClasses -name "board.txt")
 MenaceTable=$(find . -name "MenaceTable.csv")
 PositionStorage=$(find ../HelperClasses -name "PositionStorage.csv")
-
-exit 0
+Stats=$(find . -name "stats.csv")
 if [[ "$1" == "y" ]]; then
     echo "deleting..."
 
     #restarts the board
-    echo "board" > "$ActualBoard"
+    printf "board\n" > "$ActualBoard"
     for i in {1..9}; do
         if (( "$i" % 3 == 0 )); then
             printf -- "-\n" >> "$ActualBoard"
@@ -22,11 +21,13 @@ if [[ "$1" == "y" ]]; then
     done
 
     #Deletes MenaceTable
-    echo "board_number,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19" > "$MenaceTable"
+    printf "board_number,1,2,3,4,5,6,7,8,9,11,12,13,14,15,16,17,18,19" > "$MenaceTable"
 
     #Deletes PositionStorage
-    echo "" > "$PositionStorage"
+    printf "" > "$PositionStorage"
 
+    #deletes stats
+    printf "" > "$Stats"
     echo "deleted"
 else
     echo "nuh uh"
